@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ventas de Tiendas_Juan</title>
+<style>
+  :root {
+    --bg: #f6f4ef; --card: #ffffff; --ink: #1d1d1b; --muted: #6b6a66; --line: #e3e0d8;
+    --real: #1f4e79; --gen: #d9822b; --gen-soft: #f6dcc0; --alt: #9a9890; --esp: #2e7d4f; --esp-soft: #d4ecdc;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #151614; --card: #1f201d; --ink: #f0eee8; --muted: #a3a19a; --line: #34352f;
+      --real: #8fb6dc; --gen: #f0a35c; --gen-soft: #4a3520; --alt: #7d7b74; --esp: #6fcf97; --esp-soft: #1f3a2a;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #151614; --card: #1f201d; --ink: #f0eee8; --muted: #a3a19a; --line: #34352f;
+    --real: #8fb6dc; --gen: #f0a35c; --gen-soft: #4a3520; --alt: #7d7b74; --esp: #6fcf97; --esp-soft: #1f3a2a;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+    font: 16px/1.5 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 880px; margin: 0 auto; padding: 24px 16px 48px; }
+  h1 { font-size: 1.7rem; line-height: 1.2; margin: 0 0 6px; }
+  h2 { font-size: 1.2rem; margin: 0 0 4px; }
+  .paso { color: var(--muted); font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
+  .texto { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
+  .cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 0 16px; }
+  .cifra { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .cifra b { display: block; font-size: 1.5rem; line-height: 1.2; }
+  .cifra span { color: var(--muted); font-size: .85rem; }
+  .leyenda { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .85rem; color: var(--muted); margin: 12px 0 4px; }
+  .leyenda i { display: inline-block; width: 18px; height: 0; border-top: 3px solid; margin-right: 6px; vertical-align: 4px; }
+  .leyenda i.zona { height: 10px; border: 0; border-radius: 3px; vertical-align: 0; }
+  .leyenda i.punteada { border-top-style: dashed; }
+  .lectura { margin-top: 12px; padding: 10px 12px; border-left: 4px solid var(--real); background: var(--bg); border-radius: 0 8px 8px 0; font-size: .95rem; }
+  svg { width: 100%; height: auto; display: block; overflow: visible; }
+  svg text { fill: var(--muted); font-size: 12px; font-family: inherit; }
+  table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 12px 0 4px; }
+  th, td { text-align: left; padding: 7px 8px; border-bottom: 1px solid var(--line); }
+  th { color: var(--muted); font-weight: 600; font-size: .85rem; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .tabla-scroll { overflow-x: auto; }
+  details summary { cursor: pointer; font-weight: 600; }
+  details[open] summary { margin-bottom: 12px; }
+  .nota { font-size: .85rem; color: var(--muted); }
+  @media (max-width: 640px) {
+    .cifras { grid-template-columns: 1fr; }
+    h1 { font-size: 1.4rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>Tiendas_Juan: ventas reales, generadas y esperadas</h1>
+  <p class="sub">Una tienda de barrio de Loja con solo 24 meses de registros. Con inteligencia artificial generamos miles de meses parecidos a los reales para estimar cómo podrían venir las ventas de 2026 a 2028. <b>Caso aproximado con datos ficticios.</b></p>
+
+  <div class="cifras" id="cifras"></div>
+
+  <section class="card">
+    <div class="paso">Paso 1</div>
+    <h2>¿Los datos generados se parecen a los reales?</h2>
+    <p class="texto">Cada línea es un año, mes por mes. Si la IA aprendió bien, las líneas naranjas siguen la misma forma que las azules.</p>
+    <div class="leyenda">
+      <span><i style="border-color:var(--real)"></i>Ventas reales 2024 y 2025</span>
+      <span><i style="border-color:var(--gen);border-top-width:1.5px"></i>5 años generados de ejemplo</span>
+      <span><i class="zona" style="background:var(--gen-soft)"></i>Rango de los <span id="n-esc"></span> años generados</span>
+    </div>
+    <div id="g-parecido"></div>
+    <div class="lectura" id="l-parecido"></div>
+  </section>
+
+  <section class="card">
+    <div class="paso">Paso 2</div>
+    <h2>¿Qué tan bien predice? Contraste con lo que pasó en 2025</h2>
+    <p class="texto">Le escondimos al modelo los 12 meses de 2025 y le pedimos predecirlos aprendiendo <b>solo de los datos generados</b>. Luego comparamos con lo que la tienda vendió de verdad.</p>
+    <div class="leyenda">
+      <span><i style="border-color:var(--real)"></i>Lo que se vendió de verdad</span>
+      <span><i style="border-color:var(--gen)"></i>Predicción con datos generados</span>
+      <span><i class="punteada" style="border-color:var(--alt)"></i>Repetir el mismo mes del año pasado</span>
+    </div>
+    <div id="g-contraste"></div>
+    <div class="tabla-scroll"><table id="t-contraste"></table></div>
+    <div class="lectura" id="l-contraste"></div>
+  </section>
+
+  <section class="card">
+    <div class="paso">Paso 3</div>
+    <h2>Ventas esperadas para 2026, 2027 y 2028</h2>
+    <p class="texto">El modelo entrenado con los datos reales y generados estima los próximos 36 meses. La zona sombreada muestra entre qué valores suele moverse cada mes según los años generados.</p>
+    <div class="leyenda">
+      <span><i style="border-color:var(--real)"></i>Ventas reales</span>
+      <span><i class="punteada" style="border-color:var(--esp)"></i>Ventas esperadas</span>
+      <span><i class="zona" style="background:var(--esp-soft)"></i>Rango habitual (mes flojo a mes bueno)</span>
+    </div>
+    <div id="g-futuro"></div>
+    <div class="tabla-scroll"><table id="t-anual"></table></div>
+    <div class="lectura" id="l-futuro"></div>
+  </section>
+
+  <section class="card">
+    <details>
+      <summary>Detalles técnicos (para la presentación)</summary>
+      <div id="tecnico"></div>
+    </details>
+  </section>
+
+  <p class="nota">Esta página no recomienda mantener ni cerrar el negocio: muestra lo que los datos sugieren para que el dueño decida con más información. Los datos generados solo saben lo que la tienda ya vivió; si algo cambia mucho (nueva competencia, obras en la calle, una crisis), el cálculo no lo anticipa.</p>
+</main>
+
+<script>
+const D = {"real":[{"f":"2024-01","v":2194,"u":344},{"f":"2024-02","v":1910,"u":264},{"f":"2024-03","v":2037,"u":290},{"f":"2024-04","v":2499,"u":404},{"f":"2024-05","v":2234,"u":476},{"f":"2024-06","v":2262,"u":404},{"f":"2024-07","v":2381,"u":447},{"f":"2024-08","v":2666,"u":553},{"f":"2024-09","v":3063,"u":578},{"f":"2024-10","v":2341,"u":427},{"f":"2024-11","v":2506,"u":576},{"f":"2024-12","v":3146,"u":641},{"f":"2025-01","v":1965,"u":344},{"f":"2025-02","v":2044,"u":394},{"f":"2025-03","v":2329,"u":399},{"f":"2025-04","v":2450,"u":552},{"f":"2025-05","v":2449,"u":460},{"f":"2025-06","v":2280,"u":358},{"f":"2025-07","v":2328,"u":484},{"f":"2025-08","v":3158,"u":657},{"f":"2025-09","v":2779,"u":551},{"f":"2025-10","v":2604,"u":634},{"f":"2025-11","v":2752,"u":643},{"f":"2025-12","v":3685,"u":756}],"generadoMes":[{"m":1,"lo":2054,"med":2180,"hi":2316},{"m":2,"lo":1993,"med":2130,"hi":2261},{"m":3,"lo":2109,"med":2230,"hi":2353},{"m":4,"lo":2273,"med":2390,"hi":2513},{"m":5,"lo":2157,"med":2287,"hi":2443},{"m":6,"lo":2186,"med":2290,"hi":2404},{"m":7,"lo":2206,"med":2316,"hi":2422},{"m":8,"lo":2398,"med":2609,"hi":3142},{"m":9,"lo":2537,"med":2869,"hi":3097},{"m":10,"lo":2223,"med":2377,"hi":2693},{"m":11,"lo":2274,"med":2411,"hi":2753},{"m":12,"lo":2426,"med":3015,"hi":3251}],"generado5":[[2235,2302,2265,2407,2473,2305,2435,3242,3252,2376,2918,3107],[2144,2205,2219,2467,2410,2324,2375,3134,3034,2537,2858,3048],[2225,2211,2303,2451,2470,2253,2299,2931,3084,2426,2711,3045],[2260,2002,2207,2307,2291,2294,2309,2382,2800,2226,2380,2793],[2310,2133,2387,2368,2562,2387,2392,2586,2964,2610,2683,2638]],"contraste":{"real":[1965,2044,2329,2450,2449,2280,2328,3158,2779,2604,2752,3685],"sintetico":[2510,2090,2190,2439,2347,2355,2307,2684,2928,2445,2511,3083],"soloReal":[2192,2023,2054,2379,2234,2254,2383,2667,2685,2719,2860,3147],"ingenuo":[2194,1910,2037,2499,2234,2262,2381,2666,3063,2341,2506,3146]},"pron":[{"f":"2026-01","m":1,"v":2367,"lo":2054,"hi":2316},{"f":"2026-02","m":2,"v":2183,"lo":1993,"hi":2261},{"f":"2026-03","m":3,"v":2222,"lo":2109,"hi":2353},{"f":"2026-04","m":4,"v":2394,"lo":2273,"hi":2513},{"f":"2026-05","m":5,"v":2327,"lo":2157,"hi":2443},{"f":"2026-06","m":6,"v":2318,"lo":2186,"hi":2404},{"f":"2026-07","m":7,"v":2323,"lo":2206,"hi":2422},{"f":"2026-08","m":8,"v":2707,"lo":2398,"hi":3142},{"f":"2026-09","m":9,"v":2896,"lo":2537,"hi":3097},{"f":"2026-10","m":10,"v":2459,"lo":2223,"hi":2693},{"f":"2026-11","m":11,"v":2499,"lo":2274,"hi":2753},{"f":"2026-12","m":12,"v":3040,"lo":2426,"hi":3251},{"f":"2027-01","m":1,"v":2170,"lo":2054,"hi":2316},{"f":"2027-02","m":2,"v":2094,"lo":1993,"hi":2261},{"f":"2027-03","m":3,"v":2211,"lo":2109,"hi":2353},{"f":"2027-04","m":4,"v":2394,"lo":2273,"hi":2513},{"f":"2027-05","m":5,"v":2327,"lo":2157,"hi":2443},{"f":"2027-06","m":6,"v":2318,"lo":2186,"hi":2404},{"f":"2027-07","m":7,"v":2323,"lo":2206,"hi":2422},{"f":"2027-08","m":8,"v":2707,"lo":2398,"hi":3142},{"f":"2027-09","m":9,"v":2896,"lo":2537,"hi":3097},{"f":"2027-10","m":10,"v":2459,"lo":2223,"hi":2693},{"f":"2027-11","m":11,"v":2499,"lo":2274,"hi":2753},{"f":"2027-12","m":12,"v":3040,"lo":2426,"hi":3251},{"f":"2028-01","m":1,"v":2170,"lo":2054,"hi":2316},{"f":"2028-02","m":2,"v":2094,"lo":1993,"hi":2261},{"f":"2028-03","m":3,"v":2211,"lo":2109,"hi":2353},{"f":"2028-04","m":4,"v":2394,"lo":2273,"hi":2513},{"f":"2028-05","m":5,"v":2327,"lo":2157,"hi":2443},{"f":"2028-06","m":6,"v":2318,"lo":2186,"hi":2404},{"f":"2028-07","m":7,"v":2323,"lo":2206,"hi":2422},{"f":"2028-08","m":8,"v":2707,"lo":2398,"hi":3142},{"f":"2028-09","m":9,"v":2896,"lo":2537,"hi":3097},{"f":"2028-10","m":10,"v":2459,"lo":2223,"hi":2693},{"f":"2028-11","m":11,"v":2499,"lo":2274,"hi":2753},{"f":"2028-12","m":12,"v":3040,"lo":2426,"hi":3251}],"anual":{"v":[27692,29249,30794],"u":[4642,5602,6693]},"nEscenarios":2000,"validacion":[{"metodo":"Modelo entrenado solo con datos reales (11 meses)","MAE_usd":186.39,"MAPE_pct":6.79},{"metodo":"Modelo reales + sintéticos","MAE_usd":202.8,"MAPE_pct":7.49},{"metodo":"Modelo entrenado solo con datos sintéticos (TSTR)","MAE_usd":213.76,"MAPE_pct":8.03},{"metodo":"Ingenuo estacional (mismo mes del año pasado) - sin IA","MAE_usd":234.59,"MAPE_pct":8.67},{"metodo":"Promedio móvil 3 meses - sin IA","MAE_usd":347.74,"MAPE_pct":13.3}],"resumen":{"generador_elegido":"TVAE (autoencoder variacional)","generadores":{"TVAE (autoencoder variacional)":{"calidad_global":0.6992,"forma_columnas":0.7867,"relacion_entre_columnas":0.6118,"tasa_rechazo_umbrales":0.1391},"CTGAN (red generativa adversarial)":{"calidad_global":0.6237,"forma_columnas":0.8033,"relacion_entre_columnas":0.4441,"tasa_rechazo_umbrales":0.7979}},"umbrales":{"clientes":{"min":298.35,"max":694.6},"ticket_promedio":{"min":3.95,"max":7.01},"ventas_usd":{"min":1623.35,"max":4238.0},"gasto_stock_usd":{"min":1110.8,"max":3006.65},"ratio_stock_ventas":{"min":0.585,"max":0.762}},"margen_umbral":0.15,"costos_fijos_mensuales":315.0,"filas_semilla":24,"filas_sinteticas_generadas":30000}};
+const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
+const MESES_LARGO = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+const $ = (id) => document.getElementById(id);
+const usd = (x) => "$" + Math.round(x).toLocaleString("es-EC");
+const NS = "http://www.w3.org/2000/svg";
+const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag);
+  for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
+const media = (a) => a.reduce((s, x) => s + x, 0) / a.length;
+const errorMedio = (pred, real) => media(pred.map((p, i) => Math.abs(p - real[i])));
+$("n-esc").textContent = D.nEscenarios.toLocaleString("es-EC");
+
+/* Gráfico de líneas genérico.
+   opts: { cont, n, etiquetas(i)->texto|null, series:[{v:[], color, ancho, punteada, puntos, inicio, nombre}],
+           zonas:[{lo:[], hi:[], color, inicio}], separadores:[i], titulo } */
+function lineas(opts) {
+  const cont = $(opts.cont);
+  const W = Math.max(300, cont.clientWidth || 800), H = W < 500 ? 230 : 290, L = 54, R = 10, B = 28, T = 10;
+  const vals = [];
+  opts.series.forEach(s => vals.push(...s.v));
+  (opts.zonas || []).forEach(z => vals.push(...z.lo, ...z.hi));
+  const max = Math.max(...vals) * 1.04, min = Math.min(...vals) * 0.94;
+  const x = (i) => L + (W - L - R) * i / Math.max(1, opts.n - 1);
+  const y = (v) => T + (H - B - T) * (1 - (v - min) / (max - min));
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": opts.titulo });
+  const paso = (max - min) > 2500 ? 1000 : 500;
+  for (let t = Math.ceil(min / paso) * paso; t <= max; t += paso) {
+    el("line", { x1: L, x2: W - R, y1: y(t), y2: y(t), stroke: css("--line") }, svg);
+    el("text", { x: L - 8, y: y(t) + 4, "text-anchor": "end" }, svg).textContent = usd(t);
+  }
+  (opts.separadores || []).forEach(i =>
+    el("line", { x1: x(i - 0.5), x2: x(i - 0.5), y1: T, y2: H - B, stroke: css("--line"), "stroke-dasharray": "2 4" }, svg));
+  (opts.zonas || []).forEach(z => {
+    const o = z.inicio || 0;
+    const pts = z.hi.map((v, k) => `${x(o + k)},${y(v)}`).concat(z.lo.map((v, k) => `${x(o + k)},${y(v)}`).reverse());
+    el("polygon", { points: pts.join(" "), fill: css(z.color) }, svg);
+  });
+  opts.series.forEach(s => {
+    const o = s.inicio || 0;
+    el("polyline", { points: s.v.map((v, k) => `${x(o + k)},${y(v)}`).join(" "), fill: "none", stroke: css(s.color),
+      "stroke-width": s.ancho || 2.5, "stroke-dasharray": s.punteada ? "6 5" : "none", "stroke-linejoin": "round",
+      opacity: s.opacidad || 1 }, svg);
+    if (s.puntos) s.v.forEach((v, k) => {
+      const c = el("circle", { cx: x(o + k), cy: y(v), r: 3.5, fill: css(s.color) }, svg);
+      el("title", {}, c).textContent = `${s.nombre(o + k)}: ${usd(v)}`;
+    });
+  });
+  for (let i = 0; i < opts.n; i++) {
+    const lab = opts.etiquetas(i, W);
+    if (lab) el("text", { x: x(i), y: H - 6, "text-anchor": "middle" }, svg).textContent = lab;
+  }
+  cont.replaceChildren(svg);
+}
+
+function cifras() {
+  const c = D.contraste, r = D.resumen;
+  const err = errorMedio(c.sintetico, c.real) / media(c.real) * 100;
+  $("cifras").innerHTML =
+    `<div class="cifra"><span>Meses reales → meses generados</span><b>24 → ${(r.filas_sinteticas_generadas).toLocaleString("es-EC")}</b></div>` +
+    `<div class="cifra"><span>Parecido de los datos generados con los reales</span><b>${Math.round(r.generadores[r.generador_elegido].calidad_global * 100)} de 100</b></div>` +
+    `<div class="cifra"><span>Error al predecir 2025 con datos generados</span><b>± ${err.toFixed(0)}% al mes</b></div>`;
+}
+
+function parecido() {
+  const r24 = D.real.slice(0, 12).map(r => r.v), r25 = D.real.slice(12).map(r => r.v);
+  const nombre = (anio) => (i) => `${MESES[i]} ${anio}`;
+  lineas({
+    cont: "g-parecido", n: 12, titulo: "Ventas reales y generadas por mes",
+    etiquetas: (i, W) => (W < 500 ? MESES[i][0] : MESES[i]),
+    zonas: [{ lo: D.generadoMes.map(g => g.lo), hi: D.generadoMes.map(g => g.hi), color: "--gen-soft" }],
+    series: [
+      ...D.generado5.map(a => ({ v: a, color: "--gen", ancho: 1.5, opacidad: .75 })),
+      { v: r24, color: "--real", ancho: 3, puntos: true, nombre: nombre(2024) },
+      { v: r25, color: "--real", ancho: 3, puntos: true, nombre: nombre(2025) },
+    ],
+  });
+  const g = D.generadoMes;
+  const top = [...g].sort((a, b) => b.med - a.med).slice(0, 2).map(x => MESES_LARGO[x.m - 1]);
+  const bajo = [...g].sort((a, b) => a.med - b.med)[0];
+  const dentro = D.real.filter(r => { const m = +r.f.slice(5) - 1; return r.v >= g[m].lo && r.v <= g[m].hi; }).length;
+  $("l-parecido").innerHTML = `Los datos generados repiten la temporada de la tienda: <b>${top.join(" y ")}</b> son los meses más altos y <b>${MESES_LARGO[bajo.m - 1]}</b> el más bajo. ` +
+    `${dentro} de los 24 meses reales caen dentro del rango generado (lo esperable sería unos 19, porque el rango cubre 8 de cada 10 casos): ` +
+    `la IA captó bien cuánto suelen variar las ventas, aunque los meses más extremos, como diciembre de 2025, quedan algo por fuera.`;
+}
+
+function contraste() {
+  const c = D.contraste;
+  lineas({
+    cont: "g-contraste", n: 12, titulo: "Ventas reales de 2025 contra las predicciones",
+    etiquetas: (i, W) => (W < 500 ? MESES[i][0] : MESES[i]),
+    series: [
+      { v: c.ingenuo, color: "--alt", ancho: 2, punteada: true },
+      { v: c.sintetico, color: "--gen", ancho: 2.5, puntos: true, nombre: (i) => `Predicción ${MESES[i]} 2025` },
+      { v: c.real, color: "--real", ancho: 3, puntos: true, nombre: (i) => `Real ${MESES[i]} 2025` },
+    ],
+  });
+  const filas = [
+    ["Modelo que aprendió solo de los datos generados", c.sintetico],
+    ["Modelo que aprendió solo de los 11 meses reales de 2024", c.soloReal],
+    ["Repetir el mismo mes del año pasado (sin IA)", c.ingenuo],
+  ].map(([n, p]) => [n, errorMedio(p, c.real)]);
+  $("t-contraste").innerHTML = `<tr><th>Forma de predecir</th><th class="n">Se equivoca en promedio</th></tr>` +
+    filas.map(([n, e]) => `<tr><td>${n}</td><td class="n">${usd(e)} al mes (${(e / media(c.real) * 100).toFixed(1)}%)</td></tr>`).join("");
+  const [s, r, ing] = filas.map(f => f[1]);
+  $("l-contraste").innerHTML = `Aprendiendo <b>solo</b> de datos generados, el modelo se equivocó en promedio <b>${usd(s)}</b> por mes, ` +
+    `menos que repetir el año anterior (${usd(ing)}). ` +
+    (r < s ? `El modelo con los datos reales fue algo mejor (${usd(r)}): en esta prueba, los datos generados no mejoran la predicción mes a mes; su aporte está en mostrar el rango de años posibles (paso 3).`
+           : `Incluso superó al modelo con los datos reales (${usd(r)}).`);
+}
+
+function futuro() {
+  const real = D.real.map(r => r.v), p = D.pron;
+  const n = real.length + p.length;
+  const fecha = (i) => (i < real.length ? D.real[i].f : p[i - real.length].f);
+  lineas({
+    cont: "g-futuro", n, titulo: "Ventas reales 2024-2025 y esperadas 2026-2028",
+    etiquetas: (i) => ((i % 12) === 5 ? fecha(i).slice(0, 4) : null),
+    separadores: [12, 24, 36, 48],
+    zonas: [{ lo: p.map(q => q.lo), hi: p.map(q => q.hi), color: "--esp-soft", inicio: real.length }],
+    series: [
+      { v: real, color: "--real", ancho: 2.5, puntos: true, nombre: (i) => { const [a, m] = fecha(i).split("-"); return `${MESES[+m - 1]} ${a}`; } },
+      { v: [real[real.length - 1], ...p.map(q => q.v)], color: "--esp", ancho: 2.5, punteada: true, inicio: real.length - 1 },
+    ],
+  });
+  const porAnio = {};
+  D.real.forEach(r => { const a = r.f.slice(0, 4); porAnio[a] = (porAnio[a] || 0) + r.v; });
+  p.forEach(q => { const a = q.f.slice(0, 4); porAnio[a] = (porAnio[a] || 0) + q.v; });
+  const [vlo, , vhi] = D.anual.v, [ulo, umed, uhi] = D.anual.u;
+  $("t-anual").innerHTML = `<tr><th>Año</th><th class="n">Ventas del año</th><th class="n">Rango habitual de un año</th></tr>` +
+    Object.entries(porAnio).map(([a, v]) => `<tr><td>${a}${+a >= 2026 ? " (esperado)" : " (real)"}</td><td class="n">${usd(v)}</td>` +
+      `<td class="n">${+a >= 2026 ? `${usd(vlo)} – ${usd(vhi)}` : "—"}</td></tr>`).join("");
+  const r25 = porAnio["2025"], e26 = porAnio["2026"];
+  const cambio = (e26 - r25) / r25 * 100;
+  $("l-futuro").innerHTML = `Para 2026 se esperan unos <b>${usd(e26)}</b> en ventas (${cambio >= 0 ? "+" : ""}${cambio.toFixed(1)}% frente a 2025). ` +
+    `Después de pagar mercadería, arriendo y servicios, en un año típico a la tienda le quedarían unos <b>${usd(umed)}</b> ` +
+    `(entre ${usd(ulo)} en un año flojo y ${usd(uhi)} en uno bueno), es decir, unos <b>${usd(umed / 12)} al mes</b>. ` +
+    `Ojo: el modelo no supone crecimiento ni caída, porque con solo 2 años reales no hay base para estimar una tendencia.`;
+}
+
+function tecnico() {
+  const r = D.resumen;
+  const gen = Object.entries(r.generadores).map(([k, g]) =>
+    `<tr><td>${k}${k === r.generador_elegido ? " ✓" : ""}</td><td class="n">${(g.calidad_global * 100).toFixed(1)}%</td>` +
+    `<td class="n">${(g.forma_columnas * 100).toFixed(1)}%</td><td class="n">${(g.relacion_entre_columnas * 100).toFixed(1)}%</td>` +
+    `<td class="n">${(g.tasa_rechazo_umbrales * 100).toFixed(0)}%</td></tr>`).join("");
+  const umb = Object.entries(r.umbrales).map(([k, u]) => `<tr><td>${k}</td><td class="n">${u.min}</td><td class="n">${u.max}</td></tr>`).join("");
+  const val = D.validacion.map(v => `<tr><td>${v.metodo}</td><td class="n">${usd(v.MAE_usd)}</td><td class="n">${v.MAPE_pct.toFixed(1)}%</td></tr>`).join("");
+  $("tecnico").innerHTML = `
+    <p><b>Generación.</b> Con los ${r.filas_semilla} meses se entrenaron dos modelos generativos de SDV: TVAE (autoencoder variacional) y CTGAN (red generativa adversarial). Se eligió el de mayor calidad según SDMetrics.</p>
+    <div class="tabla-scroll"><table><tr><th>Modelo</th><th class="n">Calidad</th><th class="n">Forma de columnas</th><th class="n">Relación entre columnas</th><th class="n">Rechazadas por umbral</th></tr>${gen}</table></div>
+    <p><b>Umbrales.</b> Se descartó toda fila generada fuera del rango observado ± ${r.margen_umbral * 100}%.</p>
+    <div class="tabla-scroll"><table><tr><th>Variable</th><th class="n">Mínimo</th><th class="n">Máximo</th></tr>${umb}</table></div>
+    <p><b>Validación TSTR</b> (Train on Synthetic, Test on Real) contra los 12 meses reales de 2025:</p>
+    <div class="tabla-scroll"><table><tr><th>Método</th><th class="n">MAE</th><th class="n">MAPE</th></tr>${val}</table></div>
+    <p><b>Pronóstico.</b> Gradient Boosting con mes del año y ventas del mes anterior, entrenado con reales + sintéticos, aplicado de forma recursiva por 36 meses. Rango: percentiles 10 y 90 de ${D.nEscenarios} años generados (cada año comparte un nivel "bueno o malo" entre sus meses).</p>`;
+}
+
+function dibujar() { parecido(); contraste(); futuro(); }
+cifras(); tecnico(); dibujar();
+matchMedia("(prefers-color-scheme: dark)").addEventListener("change", dibujar);
+let ancho = innerWidth;
+addEventListener("resize", () => { if (innerWidth !== ancho) { ancho = innerWidth; dibujar(); } });
+</script>
+</body>
+</html>

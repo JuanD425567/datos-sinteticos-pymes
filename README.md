@@ -9,6 +9,8 @@ simula 2000 años posibles para responder: **¿puedo pagar una nueva inversión?
 - `generar_semilla.py`: crea los 24 meses "reales" (ficticios) → `data/semilla_tiendas_juan.csv`
 - `pipeline.py`: entrena SDV, aplica umbrales, valida (TSTR), pronostica 2026 y crea escenarios → `data/`
 - `app.py`: dashboard Streamlit (solo lee `data/`; no necesita SDV ni torch)
+- `generar_html.py` + `plantilla.html` → `index.html`: versión simple para el dueño de la tienda
+  (datos reales vs. generados, contraste con 2025 y ventas esperadas 2026-2028). Funciona sola, sin servidor.
 
 ## Correr localmente
 ```

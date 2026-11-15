@@ -20,7 +20,7 @@ def cargar():
         pd.read_csv(DATA / "escenarios_2000_anios.csv"),
         pd.read_csv(DATA / "validacion.csv"),
         pd.read_csv(DATA / "predicciones_2025.csv"),
-        pd.read_csv(DATA / "pronostico_2026.csv"),
+        pd.read_csv(DATA / "pronostico_2026_2028.csv").head(12),
         json.loads((DATA / "resumen.json").read_text(encoding="utf-8")),
     )
 

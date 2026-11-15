@@ -201,16 +201,17 @@ def main() -> None:
         pred_test[nombre] = np.round(pred, 2)
     pred_test.to_csv(DATA / "predicciones_2025.csv", index=False)
 
-    # --------- pronóstico 2026: modelo reales(24 meses)+sintéticos, de forma recursiva
+    # --------- pronóstico 2026-2028: modelo reales(24 meses)+sintéticos, de forma recursiva
     aumentado_full = pd.concat([real_lag] * 10 + [entrenamiento_sint], ignore_index=True)
     m_final = modelo().fit(features(aumentado_full), aumentado_full["ventas_usd"])
     anterior, filas = real["ventas_usd"].iloc[-1], []
-    for mes in range(1, 13):
+    for k in range(36):
+        anio, mes = 2026 + k // 12, k % 12 + 1
         x = features(pd.DataFrame({"mes": [mes], "ventas_mes_anterior": [anterior]}))
         p = float(m_final.predict(x)[0])
-        filas.append({"fecha": f"2026-{mes:02d}-01", "mes": mes, "ventas_pronostico_usd": round(p, 2)})
+        filas.append({"fecha": f"{anio}-{mes:02d}-01", "mes": mes, "ventas_pronostico_usd": round(p, 2)})
         anterior = p
-    pd.DataFrame(filas).to_csv(DATA / "pronostico_2026.csv", index=False)
+    pd.DataFrame(filas).to_csv(DATA / "pronostico_2026_2028.csv", index=False)
 
     # --------- escenarios: 2000 años posibles para el análisis de inversión
     escenarios = armar_anios(pool, 2000, rng)
