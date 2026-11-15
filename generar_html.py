@@ -46,7 +46,9 @@ def main() -> None:
         "pron": [{"f": r.fecha[:7], "m": int(r.mes), "v": round(r.ventas_pronostico_usd),
                   "lo": round(q.loc[r.mes, 0.1]), "hi": round(q.loc[r.mes, 0.9])} for r in pron.itertuples()],
         "anual": {"v": [round(anual.v.quantile(p)) for p in (0.1, 0.5, 0.9)],
-                  "u": [round(anual.u.quantile(p)) for p in (0.1, 0.5, 0.9)]},
+                  "u": [round(anual.u.quantile(p)) for p in (0.1, 0.5, 0.9)],
+                  # en cuántos de los años simulados se vende más que en 2025 (último año real)
+                  "pMejorQue2025": round(float((anual.v > real[real.anio == 2025].ventas_usd.sum()).mean()), 3)},
         "nEscenarios": int(esc.anio_sintetico.nunique()),
         "validacion": val.to_dict(orient="records"),
         "resumen": resumen,

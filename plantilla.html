@@ -8,16 +8,19 @@
   :root {
     --bg: #f6f4ef; --card: #ffffff; --ink: #1d1d1b; --muted: #6b6a66; --line: #e3e0d8;
     --real: #1f4e79; --gen: #d9822b; --gen-soft: #f6dcc0; --alt: #9a9890; --esp: #2e7d4f; --esp-soft: #d4ecdc;
+    --umbral: #b3261e;
   }
   @media (prefers-color-scheme: dark) {
     :root:not([data-theme="light"]) {
       --bg: #151614; --card: #1f201d; --ink: #f0eee8; --muted: #a3a19a; --line: #34352f;
       --real: #8fb6dc; --gen: #f0a35c; --gen-soft: #4a3520; --alt: #7d7b74; --esp: #6fcf97; --esp-soft: #1f3a2a;
+      --umbral: #f28b82;
     }
   }
   :root[data-theme="dark"] {
     --bg: #151614; --card: #1f201d; --ink: #f0eee8; --muted: #a3a19a; --line: #34352f;
     --real: #8fb6dc; --gen: #f0a35c; --gen-soft: #4a3520; --alt: #7d7b74; --esp: #6fcf97; --esp-soft: #1f3a2a;
+    --umbral: #f28b82;
   }
   * { box-sizing: border-box; }
   body { margin: 0; background: var(--bg); color: var(--ink);
@@ -26,18 +29,31 @@
   h1 { font-size: 1.7rem; line-height: 1.2; margin: 0 0 6px; }
   h2 { font-size: 1.2rem; margin: 0 0 4px; }
   .paso { color: var(--muted); font-size: .8rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
-  .sub { color: var(--muted); margin: 0 0 20px; }
+  .sub { color: var(--muted); margin: 0 0 16px; }
+  .flujo { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin: 0 0 20px; font-size: .9rem; }
+  .flujo span { background: var(--card); border: 1px solid var(--line); border-radius: 999px; padding: 4px 12px; }
+  .flujo b { color: var(--muted); font-weight: 400; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 20px; margin-bottom: 16px; }
   .texto { margin: 4px 0 0; color: var(--muted); font-size: .95rem; }
   .cifras { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 0 0 16px; }
   .cifra { background: var(--card); border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
-  .cifra b { display: block; font-size: 1.5rem; line-height: 1.2; }
+  .cifra b { display: block; font-size: 1.45rem; line-height: 1.2; }
   .cifra span { color: var(--muted); font-size: .85rem; }
   .leyenda { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .85rem; color: var(--muted); margin: 12px 0 4px; }
   .leyenda i { display: inline-block; width: 18px; height: 0; border-top: 3px solid; margin-right: 6px; vertical-align: 4px; }
   .leyenda i.zona { height: 10px; border: 0; border-radius: 3px; vertical-align: 0; }
   .leyenda i.punteada { border-top-style: dashed; }
   .lectura { margin-top: 12px; padding: 10px 12px; border-left: 4px solid var(--real); background: var(--bg); border-radius: 0 8px 8px 0; font-size: .95rem; }
+  .umbrales { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
+  .umbral { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .umbral span { display: block; color: var(--muted); font-size: .85rem; }
+  .umbral b { font-variant-numeric: tabular-nums; }
+  .anios { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 12px; }
+  .anio { border: 1px solid var(--line); border-radius: 12px; padding: 14px; }
+  .anio h3 { margin: 0 0 6px; font-size: 1rem; }
+  .anio b { display: block; font-size: 1.35rem; }
+  .anio span { display: block; color: var(--muted); font-size: .85rem; }
+  .anio .comp { margin-top: 8px; color: var(--ink); font-size: .9rem; }
   svg { width: 100%; height: auto; display: block; overflow: visible; }
   svg text { fill: var(--muted); font-size: 12px; font-family: inherit; }
   table { width: 100%; border-collapse: collapse; font-size: .9rem; margin: 12px 0 4px; }
@@ -49,22 +65,38 @@
   details[open] summary { margin-bottom: 12px; }
   .nota { font-size: .85rem; color: var(--muted); }
   @media (max-width: 640px) {
-    .cifras { grid-template-columns: 1fr; }
+    .cifras, .anios { grid-template-columns: 1fr; }
+    .umbrales { grid-template-columns: 1fr; }
     h1 { font-size: 1.4rem; }
   }
 </style>
 </head>
 <body>
 <main>
-  <h1>Tiendas_Juan: ventas reales, generadas y esperadas</h1>
-  <p class="sub">Una tienda de barrio de Loja con solo 24 meses de registros. Con inteligencia artificial generamos 5 años más de datos parecidos a los reales para estimar cómo podrían venir las ventas de 2026 a 2028. <b>Caso aproximado con datos ficticios.</b></p>
+  <h1>Tiendas_Juan: ¿cómo podrían venir las ventas?</h1>
+  <p class="sub">Una tienda de barrio de Loja con solo 24 meses de registros. Con inteligencia artificial generamos más datos parecidos a los reales para estimar si los próximos años pintan buenos o malos. <b>Caso aproximado con datos ficticios.</b></p>
+  <div class="flujo">
+    <span>1. Pocos datos reales</span><b>→</b><span>umbrales</span><b>→</b><span>2. Datos generados por IA</span><b>→</b><span>modelo</span><b>→</b><span>3. Próximos años</span>
+  </div>
 
   <div class="cifras" id="cifras"></div>
 
   <section class="card">
     <div class="paso">Paso 1</div>
-    <h2>¿Los datos generados se parecen a los reales?</h2>
-    <p class="texto">La IA aprendió de los 2 años reales y generó 5 años más. Aquí se compara cuánto se vende en promedio cada mes. Si las dos barras de un mes miden parecido, la IA aprendió bien ese mes.</p>
+    <h2>Los datos de la tienda y sus umbrales</h2>
+    <p class="texto">La tienda solo tiene 2 años de ventas. Con ellos fijamos <b>umbrales</b>: un mínimo y un máximo para cada dato, a partir de lo que la tienda ya vivió (con un margen de <span id="margen"></span>). Así, la IA no puede inventar cifras absurdas, como una tienda que de pronto vende $80.000 al mes.</p>
+    <div class="leyenda">
+      <span><i style="border-color:var(--real)"></i>Ventas reales de cada mes</span>
+      <span><i class="punteada" style="border-color:var(--umbral)"></i>Umbral mínimo y máximo de ventas</span>
+    </div>
+    <div id="g-reales"></div>
+    <div class="umbrales" id="umbrales"></div>
+  </section>
+
+  <section class="card">
+    <div class="paso">Paso 2</div>
+    <h2>Los datos generados por la IA</h2>
+    <p class="texto">La IA aprendió de los 2 años reales y generó más años parecidos. Aquí se compara cuánto se vende en promedio cada mes: si las dos barras de un mes miden parecido, la IA aprendió bien ese mes.</p>
     <div class="leyenda">
       <span><i class="zona" style="background:var(--real)"></i>Real (promedio de 2024 y 2025)</span>
       <span><i class="zona" style="background:var(--gen)"></i>Generado por IA (promedio de 5 años)</span>
@@ -74,30 +106,16 @@
   </section>
 
   <section class="card">
-    <div class="paso">Paso 2</div>
-    <h2>¿Qué tan bien predice? Contraste con lo que pasó en 2025</h2>
-    <p class="texto">Le escondimos al modelo los 12 meses de 2025 y le pedimos predecirlos aprendiendo <b>solo de los datos generados</b>. Luego comparamos con lo que la tienda vendió de verdad.</p>
-    <div class="leyenda">
-      <span><i style="border-color:var(--real)"></i>Lo que se vendió de verdad</span>
-      <span><i style="border-color:var(--gen)"></i>Predicción con datos generados</span>
-      <span><i class="punteada" style="border-color:var(--alt)"></i>Repetir el mismo mes del año pasado</span>
-    </div>
-    <div id="g-contraste"></div>
-    <div class="tabla-scroll"><table id="t-contraste"></table></div>
-    <div class="lectura" id="l-contraste"></div>
-  </section>
-
-  <section class="card">
     <div class="paso">Paso 3</div>
-    <h2>Ventas esperadas para 2026, 2027 y 2028</h2>
-    <p class="texto">El modelo entrenado con los datos reales y generados estima los próximos 36 meses. La zona sombreada muestra entre qué valores suele moverse cada mes según los datos generados.</p>
+    <h2>¿Cómo podrían venir 2026, 2027 y 2028?</h2>
+    <p class="texto">Un modelo entrenado con los datos reales y los generados estima los próximos 36 meses. La zona sombreada muestra entre qué valores suele moverse cada mes.</p>
     <div class="leyenda">
       <span><i style="border-color:var(--real)"></i>Ventas reales</span>
       <span><i class="punteada" style="border-color:var(--esp)"></i>Ventas esperadas</span>
       <span><i class="zona" style="background:var(--esp-soft)"></i>Rango habitual (mes flojo a mes bueno)</span>
     </div>
     <div id="g-futuro"></div>
-    <div class="tabla-scroll"><table id="t-anual"></table></div>
+    <div class="anios" id="anios"></div>
     <div class="lectura" id="l-futuro"></div>
   </section>
 
@@ -128,10 +146,10 @@ const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag)
   for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
 const media = (a) => a.reduce((s, x) => s + x, 0) / a.length;
 const errorMedio = (pred, real) => media(pred.map((p, i) => Math.abs(p - real[i])));
+const R = D.resumen, U = R.umbrales;
+const total = (anio) => D.real.filter(r => r.f.startsWith(anio)).reduce((s, r) => s + r.v, 0);
 
-/* Gráfico de líneas genérico.
-   opts: { cont, n, etiquetas(i)->texto|null, series:[{v:[], color, ancho, punteada, puntos, inicio, nombre}],
-           zonas:[{lo:[], hi:[], color, inicio}], separadores:[i], titulo } */
+/* Gráfico de líneas genérico. */
 function lineas(opts) {
   const cont = $(opts.cont);
   const W = Math.max(300, cont.clientWidth || 800), H = W < 500 ? 230 : 290, L = 54, R = 10, B = 28, T = 10;
@@ -157,8 +175,11 @@ function lineas(opts) {
   opts.series.forEach(s => {
     const o = s.inicio || 0;
     el("polyline", { points: s.v.map((v, k) => `${x(o + k)},${y(v)}`).join(" "), fill: "none", stroke: css(s.color),
-      "stroke-width": s.ancho || 2.5, "stroke-dasharray": s.punteada ? "6 5" : "none", "stroke-linejoin": "round",
-      opacity: s.opacidad || 1 }, svg);
+      "stroke-width": s.ancho || 2.5, "stroke-dasharray": s.punteada ? "6 5" : "none", "stroke-linejoin": "round" }, svg);
+    if (s.etiqueta) {
+      const t = el("text", { x: W - R, y: y(s.v[s.v.length - 1]) - 6, "text-anchor": "end" }, svg);
+      t.textContent = s.etiqueta; t.style.fill = css(s.color);
+    }
     if (s.puntos) s.v.forEach((v, k) => {
       const c = el("circle", { cx: x(o + k), cy: y(v), r: 3.5, fill: css(s.color) }, svg);
       el("title", {}, c).textContent = `${s.nombre(o + k)}: ${usd(v)}`;
@@ -172,22 +193,41 @@ function lineas(opts) {
 }
 
 function cifras() {
-  const c = D.contraste, r = D.resumen;
-  const err = errorMedio(c.sintetico, c.real) / media(c.real) * 100;
+  const e26 = D.pron.filter(q => q.f.startsWith("2026")).reduce((s, q) => s + q.v, 0);
   $("cifras").innerHTML =
     `<div class="cifra"><span>Historial de la tienda</span><b>2 años reales + ${D.nGenerados / 12} generados</b></div>` +
-    `<div class="cifra"><span>Parecido de los datos generados con los reales</span><b>${Math.round(r.generadores[r.generador_elegido].calidad_global * 100)} de 100</b></div>` +
-    `<div class="cifra"><span>Error al predecir 2025 con datos generados</span><b>± ${err.toFixed(0)}% al mes</b></div>`;
+    `<div class="cifra"><span>Parecido de los datos generados con los reales</span><b>${Math.round(R.generadores[R.generador_elegido].calidad_global * 100)} de 100</b></div>` +
+    `<div class="cifra"><span>Ventas esperadas en 2026</span><b>${usd(e26)}</b></div>`;
+}
+
+function reales() {
+  const v = D.real.map(r => r.v);
+  lineas({
+    cont: "g-reales", n: v.length, titulo: "Ventas reales y umbrales",
+    etiquetas: (i) => (i === 5 ? "2024" : i === 17 ? "2025" : null), separadores: [12],
+    series: [
+      { v: v.map(() => U.ventas_usd.max), color: "--umbral", ancho: 1.5, punteada: true, etiqueta: `máximo ${usd(U.ventas_usd.max)}` },
+      { v: v.map(() => U.ventas_usd.min), color: "--umbral", ancho: 1.5, punteada: true, etiqueta: `mínimo ${usd(U.ventas_usd.min)}` },
+      { v, color: "--real", ancho: 2.5, puntos: true, nombre: (i) => { const [a, m] = D.real[i].f.split("-"); return `${MESES[+m - 1]} ${a}`; } },
+    ],
+  });
+  const fila = (nombre, u, fmt) => `<div class="umbral"><span>${nombre}</span><b>entre ${fmt(u.min)} y ${fmt(u.max)}</b></div>`;
+  $("umbrales").innerHTML =
+    fila("Ventas del mes", U.ventas_usd, usd) +
+    fila("Clientes del mes", U.clientes, (x) => Math.round(x).toLocaleString("es-EC")) +
+    fila("Gasto promedio por cliente", U.ticket_promedio, (x) => "$" + x.toFixed(2).replace(".", ",")) +
+    fila("Gasto en mercadería del mes", U.gasto_stock_usd, usd);
+  $("margen").textContent = `${Math.round(R.margen_umbral * 100)} %`;
 }
 
 function parecido() {
   const { real, generado } = D.promedioMes;
   const cont = $("g-parecido");
   const W = Math.max(300, cont.clientWidth || 800);
-  const L = 40, R = 64, fila = 34, barra = 13, T = 4;
+  const L = 40, Rm = 64, fila = 34, barra = 13, T = 4;
   const H = T + fila * 12;
   const max = Math.max(...real, ...generado);
-  const x = (v) => L + (W - L - R) * v / max;
+  const x = (v) => L + (W - L - Rm) * v / max;
   const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Ventas promedio por mes: real contra generado" });
   MESES.forEach((m, i) => {
     const y0 = T + i * fila;
@@ -205,39 +245,15 @@ function parecido() {
   const altoR = orden(real)[0][1], altoG = orden(generado)[0][1];
   const bajoR = orden(real).at(-1)[1], bajoG = orden(generado).at(-1)[1];
   const difs = real.map((v, i) => Math.abs(generado[i] - v) / v * 100);
-  const difMedia = media(difs), peor = difs.indexOf(Math.max(...difs));
-  const igualTemporada = altoR === altoG && bajoR === bajoG;
+  const peor = difs.indexOf(Math.max(...difs));
+  const rechazo = Math.round(R.generadores[R.generador_elegido].tasa_rechazo_umbrales * 100);
   $("l-parecido").innerHTML =
-    (igualTemporada
+    (altoR === altoG && bajoR === bajoG
       ? `La IA copió la temporada de la tienda: en ambos casos el mejor mes es <b>${MESES_LARGO[altoR]}</b> y el más flojo <b>${MESES_LARGO[bajoR]}</b>. `
       : `En lo real, el mejor mes es ${MESES_LARGO[altoR]} y el más flojo ${MESES_LARGO[bajoR]}; en lo generado, ${MESES_LARGO[altoG]} y ${MESES_LARGO[bajoG]}. `) +
-    `En promedio, cada mes generado se aleja <b>${difMedia.toFixed(0)}%</b> del real. La mayor diferencia está en ` +
-    `<b>${MESES_LARGO[peor]}</b> (${usd(real[peor])} real contra ${usd(generado[peor])} generado).`;
-}
-
-function contraste() {
-  const c = D.contraste;
-  lineas({
-    cont: "g-contraste", n: 12, titulo: "Ventas reales de 2025 contra las predicciones",
-    etiquetas: (i, W) => (W < 500 ? MESES[i][0] : MESES[i]),
-    series: [
-      { v: c.ingenuo, color: "--alt", ancho: 2, punteada: true },
-      { v: c.sintetico, color: "--gen", ancho: 2.5, puntos: true, nombre: (i) => `Predicción ${MESES[i]} 2025` },
-      { v: c.real, color: "--real", ancho: 3, puntos: true, nombre: (i) => `Real ${MESES[i]} 2025` },
-    ],
-  });
-  const filas = [
-    ["Modelo que aprendió solo de los datos generados", c.sintetico],
-    ["Modelo que aprendió solo de los 11 meses reales de 2024", c.soloReal],
-    ["Repetir el mismo mes del año pasado (sin IA)", c.ingenuo],
-  ].map(([n, p]) => [n, errorMedio(p, c.real)]);
-  $("t-contraste").innerHTML = `<tr><th>Forma de predecir</th><th class="n">Se equivoca en promedio</th></tr>` +
-    filas.map(([n, e]) => `<tr><td>${n}</td><td class="n">${usd(e)} al mes (${(e / media(c.real) * 100).toFixed(1)}%)</td></tr>`).join("");
-  const [s, r, ing] = filas.map(f => f[1]);
-  $("l-contraste").innerHTML = `Aprendiendo <b>solo</b> de datos generados, el modelo se equivocó en promedio <b>${usd(s)}</b> por mes, ` +
-    `menos que repetir el año anterior (${usd(ing)}). ` +
-    (r < s ? `El modelo con los datos reales fue algo mejor (${usd(r)}): en esta prueba, los datos generados no mejoran la predicción mes a mes; su aporte está en mostrar el rango de años posibles (paso 3).`
-           : `Incluso superó al modelo con los datos reales (${usd(r)}).`);
+    `En promedio, cada mes generado se aleja <b>${media(difs).toFixed(0)}%</b> del real; la mayor diferencia está en ` +
+    `<b>${MESES_LARGO[peor]}</b> (${usd(real[peor])} real contra ${usd(generado[peor])} generado). ` +
+    `Los umbrales hicieron su trabajo: se descartó el <b>${rechazo}%</b> de lo que generó la IA por salirse de ellos.`;
 }
 
 function futuro() {
@@ -254,40 +270,45 @@ function futuro() {
       { v: [real[real.length - 1], ...p.map(q => q.v)], color: "--esp", ancho: 2.5, punteada: true, inicio: real.length - 1 },
     ],
   });
-  const porAnio = {};
-  D.real.forEach(r => { const a = r.f.slice(0, 4); porAnio[a] = (porAnio[a] || 0) + r.v; });
-  p.forEach(q => { const a = q.f.slice(0, 4); porAnio[a] = (porAnio[a] || 0) + q.v; });
+  const t25 = total("2025");
   const [vlo, , vhi] = D.anual.v, [ulo, umed, uhi] = D.anual.u;
-  $("t-anual").innerHTML = `<tr><th>Año</th><th class="n">Ventas del año</th><th class="n">Rango habitual de un año</th></tr>` +
-    Object.entries(porAnio).map(([a, v]) => `<tr><td>${a}${+a >= 2026 ? " (esperado)" : " (real)"}</td><td class="n">${usd(v)}</td>` +
-      `<td class="n">${+a >= 2026 ? `${usd(vlo)} – ${usd(vhi)}` : "—"}</td></tr>`).join("");
-  const r25 = porAnio["2025"], e26 = porAnio["2026"];
-  const cambio = (e26 - r25) / r25 * 100;
-  $("l-futuro").innerHTML = `Para 2026 se esperan unos <b>${usd(e26)}</b> en ventas (${cambio >= 0 ? "+" : ""}${cambio.toFixed(1)}% frente a 2025). ` +
+  const de10 = Math.round(D.anual.pMejorQue2025 * 10);
+  $("anios").innerHTML = ["2026", "2027", "2028"].map(a => {
+    const v = p.filter(q => q.f.startsWith(a)).reduce((s, q) => s + q.v, 0);
+    const cambio = (v - t25) / t25 * 100;
+    return `<div class="anio"><h3>${a}</h3><span>Ventas esperadas</span><b>${usd(v)}</b>` +
+      `<span>${cambio >= 0 ? "+" : ""}${cambio.toFixed(1)}% frente a 2025</span>` +
+      `<span>Rango: ${usd(vlo)} – ${usd(vhi)}</span>` +
+      `<div class="comp">En <b>${de10} de cada 10</b> escenarios se vende más que en 2025.</div></div>`;
+  }).join("");
+  $("l-futuro").innerHTML = `2025 fue un año fuerte para la tienda (${usd(t25)}), así que superarlo no es lo más probable: ` +
+    `ocurre en ${de10} de cada 10 escenarios. Lo más probable es un año <b>parecido a 2024</b> (${usd(total("2024"))}). ` +
     `Después de pagar mercadería, arriendo y servicios, en un año típico a la tienda le quedarían unos <b>${usd(umed)}</b> ` +
     `(entre ${usd(ulo)} en un año flojo y ${usd(uhi)} en uno bueno), es decir, unos <b>${usd(umed / 12)} al mes</b>. ` +
-    `Ojo: el modelo no supone crecimiento ni caída, porque con solo 2 años reales no hay base para estimar una tendencia.`;
+    `Ojo: con solo 2 años reales no hay base para estimar si el negocio crece o decrece, por eso los tres años se ven parecidos.`;
 }
 
 function tecnico() {
-  const r = D.resumen;
-  const gen = Object.entries(r.generadores).map(([k, g]) =>
-    `<tr><td>${k}${k === r.generador_elegido ? " ✓" : ""}</td><td class="n">${(g.calidad_global * 100).toFixed(1)}%</td>` +
+  const c = D.contraste;
+  const gen = Object.entries(R.generadores).map(([k, g]) =>
+    `<tr><td>${k}${k === R.generador_elegido ? " ✓" : ""}</td><td class="n">${(g.calidad_global * 100).toFixed(1)}%</td>` +
     `<td class="n">${(g.forma_columnas * 100).toFixed(1)}%</td><td class="n">${(g.relacion_entre_columnas * 100).toFixed(1)}%</td>` +
     `<td class="n">${(g.tasa_rechazo_umbrales * 100).toFixed(0)}%</td></tr>`).join("");
-  const umb = Object.entries(r.umbrales).map(([k, u]) => `<tr><td>${k}</td><td class="n">${u.min}</td><td class="n">${u.max}</td></tr>`).join("");
-  const val = D.validacion.map(v => `<tr><td>${v.metodo}</td><td class="n">${usd(v.MAE_usd)}</td><td class="n">${v.MAPE_pct.toFixed(1)}%</td></tr>`).join("");
+  const filas = [
+    ["Modelo que aprendió solo de los 11 meses reales de 2024", c.soloReal],
+    ["Repetir el mismo mes del año pasado (sin IA)", c.ingenuo],
+    ["Modelo que aprendió solo de datos generados a partir de 2024", c.sintetico],
+  ].map(([nm, pr]) => { const e = errorMedio(pr, c.real); return `<tr><td>${nm}</td><td class="n">${usd(e)} (${(e / media(c.real) * 100).toFixed(1)}%)</td></tr>`; }).join("");
   $("tecnico").innerHTML = `
-    <p><b>Generación.</b> Con los ${r.filas_semilla} meses se entrenaron dos modelos generativos de SDV: TVAE (autoencoder variacional) y CTGAN (red generativa adversarial). Se eligió el de mayor calidad según SDMetrics.</p>
+    <p><b>Generación.</b> Con los ${R.filas_semilla} meses se entrenaron dos modelos generativos de la librería SDV: TVAE (autoencoder variacional) y CTGAN (red generativa adversarial). Se eligió el de mayor calidad según SDMetrics.</p>
     <div class="tabla-scroll"><table><tr><th>Modelo</th><th class="n">Calidad</th><th class="n">Forma de columnas</th><th class="n">Relación entre columnas</th><th class="n">Rechazadas por umbral</th></tr>${gen}</table></div>
-    <p><b>Umbrales.</b> Se descartó toda fila generada fuera del rango observado ± ${r.margen_umbral * 100}%.</p>
-    <div class="tabla-scroll"><table><tr><th>Variable</th><th class="n">Mínimo</th><th class="n">Máximo</th></tr>${umb}</table></div>
-    <p><b>Validación TSTR</b> (Train on Synthetic, Test on Real) contra los 12 meses reales de 2025:</p>
-    <div class="tabla-scroll"><table><tr><th>Método</th><th class="n">MAE</th><th class="n">MAPE</th></tr>${val}</table></div>
-    <p><b>Pronóstico.</b> Gradient Boosting con mes del año y ventas del mes anterior, entrenado con reales + sintéticos, aplicado de forma recursiva por 36 meses. Rango: percentiles 10 y 90 de ${D.nEscenarios} años generados (cada año comparte un nivel "bueno o malo" entre sus meses).</p>`;
+    <p><b>Examen del método (TSTR: Train on Synthetic, Test on Real).</b> Para saber si el método merece confianza, se hizo como si solo existiera 2024: la IA generó datos a partir de 2024, un modelo aprendió de ellos y predijo 2025, que luego se comparó con las ventas registradas. Error promedio por mes:</p>
+    <div class="tabla-scroll"><table><tr><th>Forma de predecir 2025</th><th class="n">Error promedio</th></tr>${filas}</table></div>
+    <p>Con solo 12 meses para aprender, los datos generados <b>no superaron</b> a repetir el año anterior ni al modelo con datos reales. Su aporte no está en acertar un número, sino en mostrar el <b>rango</b> de lo que podría pasar (paso 3), algo que repetir el año anterior no da. El pronóstico final usa los 24 meses.</p>
+    <p><b>Pronóstico.</b> Gradient Boosting con el mes del año y las ventas del mes anterior, entrenado con datos reales y generados, aplicado de forma recursiva por 36 meses. El rango y la comparación con 2025 salen de ${D.nEscenarios.toLocaleString("es-EC")} años simulados con el modelo generativo; cada año simulado comparte un nivel "bueno o malo" entre sus meses. Costos fijos supuestos: ${usd(R.costos_fijos_mensuales)} al mes.</p>`;
 }
 
-function dibujar() { parecido(); contraste(); futuro(); }
+function dibujar() { reales(); parecido(); futuro(); }
 cifras(); tecnico(); dibujar();
 matchMedia("(prefers-color-scheme: dark)").addEventListener("change", dibujar);
 let ancho = innerWidth;

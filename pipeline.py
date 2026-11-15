@@ -124,7 +124,7 @@ def main() -> None:
 
     torch.manual_seed(425)  # resultados reproducibles
     rng = np.random.default_rng(425)
-    real =pd.read_csv(DATA / "semilla_tiendas_juan.csv")
+    real = pd.read_csv(DATA / "semilla_tiendas_juan.csv")
     umbrales = calcular_umbrales(real)
 
     metadata = Metadata.detect_from_dataframes({"tienda": real[COLUMNAS_GEN]}, infer_keys=None)
@@ -164,10 +164,21 @@ def main() -> None:
     historial.to_csv(DATA / "historial_sintetico_5_anios.csv", index=False)
 
     # --------- validación TSTR: probamos contra los 12 meses reales de 2025
+    # Para que la prueba sea limpia (sin fuga de datos), el generador de validación aprende SOLO de 2024:
+    # ni los datos sintéticos ni los modelos ven 2025 antes de predecirlo.
     real_lag = con_lag(real)
     test = real_lag[real_lag["anio"] == 2025]
     train_real = real_lag[real_lag["anio"] == 2024]
-    entrenamiento_sint = con_lag(armar_anios(pool, 200, rng), grupo="anio_sintetico")
+    real_2024_filas = real[real["anio"] == 2024]
+    umbrales_val = calcular_umbrales(real_2024_filas)
+    print("Entrenando generador de validación (solo 2024)...")
+    synth_val = TVAESynthesizer(metadata, epochs=1500, batch_size=12, enforce_min_max_values=False) \
+        if elegido.startswith("TVAE") else \
+        CTGANSynthesizer(metadata, epochs=1500, batch_size=10, enforce_min_max_values=False)
+    synth_val.fit({"tienda": real_2024_filas[COLUMNAS_GEN]})
+    pool_val, rechazo_val = muestrear_valido(synth_val, 30000, umbrales_val)
+    print(f"  rechazo por umbrales (validación): {rechazo_val:.3f}")
+    entrenamiento_sint = con_lag(armar_anios(pool_val, 200, rng), grupo="anio_sintetico")
 
     m_real = modelo().fit(features(train_real), train_real["ventas_usd"])
     m_sint = modelo().fit(features(entrenamiento_sint), entrenamiento_sint["ventas_usd"])
@@ -202,7 +213,9 @@ def main() -> None:
     pred_test.to_csv(DATA / "predicciones_2025.csv", index=False)
 
     # --------- pronóstico 2026-2028: modelo reales(24 meses)+sintéticos, de forma recursiva
-    aumentado_full = pd.concat([real_lag] * 10 + [entrenamiento_sint], ignore_index=True)
+    # Aquí sí se usa el generador entrenado con los 24 meses: el futuro no se conoce, no hay fuga posible.
+    entrenamiento_sint_full = con_lag(armar_anios(pool, 200, rng), grupo="anio_sintetico")
+    aumentado_full = pd.concat([real_lag] * 10 + [entrenamiento_sint_full], ignore_index=True)
     m_final = modelo().fit(features(aumentado_full), aumentado_full["ventas_usd"])
     anterior, filas = real["ventas_usd"].iloc[-1], []
     for k in range(36):
@@ -227,6 +240,8 @@ def main() -> None:
         "costos_fijos_mensuales": ARRIENDO + SERVICIOS,
         "filas_semilla": len(real),
         "filas_sinteticas_generadas": len(pool),
+        "validacion_generador_entrenado_con": "solo 2024 (12 meses), para evitar fuga de datos",
+        "validacion_tasa_rechazo_umbrales": round(rechazo_val, 4),
     }
     (DATA / "resumen.json").write_text(json.dumps(resumen, indent=2, ensure_ascii=False), encoding="utf-8")
     print(json.dumps(resumen, indent=2, ensure_ascii=False))

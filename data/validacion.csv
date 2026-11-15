@@ -1,6 +1,6 @@
 metodo,MAE_usd,MAPE_pct
 Modelo entrenado solo con datos reales (11 meses),186.39,6.79
-Modelo reales + sintéticos,202.8,7.49
-Modelo entrenado solo con datos sintéticos (TSTR),213.76,8.03
 Ingenuo estacional (mismo mes del año pasado) - sin IA,234.59,8.67
+Modelo reales + sintéticos,248.17,9.06
+Modelo entrenado solo con datos sintéticos (TSTR),252.31,9.26
 Promedio móvil 3 meses - sin IA,347.74,13.3

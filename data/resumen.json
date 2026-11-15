@@ -39,5 +39,7 @@
   "margen_umbral": 0.15,
   "costos_fijos_mensuales": 315.0,
   "filas_semilla": 24,
-  "filas_sinteticas_generadas": 30000
+  "filas_sinteticas_generadas": 30000,
+  "validacion_generador_entrenado_con": "solo 2024 (12 meses), para evitar fuga de datos",
+  "validacion_tasa_rechazo_umbrales": 0.1277
 }
