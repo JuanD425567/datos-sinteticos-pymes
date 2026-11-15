@@ -32,8 +32,11 @@ def main() -> None:
         "real": [{"f": r.fecha[:7], "v": round(r.ventas_usd), "u": round(r.utilidad_usd)} for r in real.itertuples()],
         "generadoMes": [{"m": int(m), "lo": round(q.loc[m, 0.1]), "med": round(q.loc[m, 0.5]), "hi": round(q.loc[m, 0.9])}
                         for m in q.index],
-        "generado5": hist.sort_values(["anio_sintetico", "mes"]).groupby("anio_sintetico").ventas_usd
-                         .apply(lambda s: [round(x) for x in s]).tolist(),
+        "promedioMes": {
+            "real": [round(x) for x in real.groupby("mes").ventas_usd.mean()],
+            "generado": [round(x) for x in hist.groupby("mes").ventas_usd.mean()],
+        },
+        "nGenerados": len(hist),
         "contraste": {
             "real": [round(x) for x in pred.ventas_usd],
             "sintetico": [round(x) for x in pred[sint_col]],

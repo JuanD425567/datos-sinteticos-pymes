@@ -64,11 +64,10 @@
   <section class="card">
     <div class="paso">Paso 1</div>
     <h2>¿Los datos generados se parecen a los reales?</h2>
-    <p class="texto">Cada línea es un año, mes por mes. Si la IA aprendió bien, las líneas naranjas siguen la misma forma que las azules.</p>
+    <p class="texto">La IA aprendió de los 2 años reales y generó 5 años más. Aquí se compara cuánto se vende en promedio cada mes. Si las dos barras de un mes miden parecido, la IA aprendió bien ese mes.</p>
     <div class="leyenda">
-      <span><i style="border-color:var(--real)"></i>Ventas reales 2024 y 2025</span>
-      <span><i style="border-color:var(--gen);border-top-width:1.5px"></i>5 años generados de ejemplo</span>
-      <span><i class="zona" style="background:var(--gen-soft)"></i>Rango de los <span id="n-esc"></span> años generados</span>
+      <span><i class="zona" style="background:var(--real)"></i>Real (promedio de 2024 y 2025)</span>
+      <span><i class="zona" style="background:var(--gen)"></i>Generado por IA (promedio de 5 años)</span>
     </div>
     <div id="g-parecido"></div>
     <div class="lectura" id="l-parecido"></div>
@@ -91,7 +90,7 @@
   <section class="card">
     <div class="paso">Paso 3</div>
     <h2>Ventas esperadas para 2026, 2027 y 2028</h2>
-    <p class="texto">El modelo entrenado con los datos reales y generados estima los próximos 36 meses. La zona sombreada muestra entre qué valores suele moverse cada mes según los años generados.</p>
+    <p class="texto">El modelo entrenado con los datos reales y generados estima los próximos 36 meses. La zona sombreada muestra entre qué valores suele moverse cada mes según los datos generados.</p>
     <div class="leyenda">
       <span><i style="border-color:var(--real)"></i>Ventas reales</span>
       <span><i class="punteada" style="border-color:var(--esp)"></i>Ventas esperadas</span>
@@ -124,7 +123,6 @@ const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag)
   for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
 const media = (a) => a.reduce((s, x) => s + x, 0) / a.length;
 const errorMedio = (pred, real) => media(pred.map((p, i) => Math.abs(p - real[i])));
-$("n-esc").textContent = D.nEscenarios.toLocaleString("es-EC");
 
 /* Gráfico de líneas genérico.
    opts: { cont, n, etiquetas(i)->texto|null, series:[{v:[], color, ancho, punteada, puntos, inicio, nombre}],
@@ -172,31 +170,44 @@ function cifras() {
   const c = D.contraste, r = D.resumen;
   const err = errorMedio(c.sintetico, c.real) / media(c.real) * 100;
   $("cifras").innerHTML =
-    `<div class="cifra"><span>Meses reales → meses generados</span><b>24 → ${(r.filas_sinteticas_generadas).toLocaleString("es-EC")}</b></div>` +
+    `<div class="cifra"><span>Historial de la tienda</span><b>2 años reales + ${D.nGenerados / 12} generados</b></div>` +
     `<div class="cifra"><span>Parecido de los datos generados con los reales</span><b>${Math.round(r.generadores[r.generador_elegido].calidad_global * 100)} de 100</b></div>` +
     `<div class="cifra"><span>Error al predecir 2025 con datos generados</span><b>± ${err.toFixed(0)}% al mes</b></div>`;
 }
 
 function parecido() {
-  const r24 = D.real.slice(0, 12).map(r => r.v), r25 = D.real.slice(12).map(r => r.v);
-  const nombre = (anio) => (i) => `${MESES[i]} ${anio}`;
-  lineas({
-    cont: "g-parecido", n: 12, titulo: "Ventas reales y generadas por mes",
-    etiquetas: (i, W) => (W < 500 ? MESES[i][0] : MESES[i]),
-    zonas: [{ lo: D.generadoMes.map(g => g.lo), hi: D.generadoMes.map(g => g.hi), color: "--gen-soft" }],
-    series: [
-      ...D.generado5.map(a => ({ v: a, color: "--gen", ancho: 1.5, opacidad: .75 })),
-      { v: r24, color: "--real", ancho: 3, puntos: true, nombre: nombre(2024) },
-      { v: r25, color: "--real", ancho: 3, puntos: true, nombre: nombre(2025) },
-    ],
+  const { real, generado } = D.promedioMes;
+  const cont = $("g-parecido");
+  const W = Math.max(300, cont.clientWidth || 800);
+  const L = 40, R = 64, fila = 34, barra = 13, T = 4;
+  const H = T + fila * 12;
+  const max = Math.max(...real, ...generado);
+  const x = (v) => L + (W - L - R) * v / max;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Ventas promedio por mes: real contra generado" });
+  MESES.forEach((m, i) => {
+    const y0 = T + i * fila;
+    el("text", { x: 0, y: y0 + barra + 4 }, svg).textContent = m;
+    [[real[i], "--real", "Real"], [generado[i], "--gen", "Generado"]].forEach(([v, color, quien], k) => {
+      const y = y0 + k * (barra + 2);
+      const r = el("rect", { x: L, y, width: x(v) - L, height: barra, rx: 3, fill: css(color) }, svg);
+      el("title", {}, r).textContent = `${MESES_LARGO[i]}, ${quien.toLowerCase()}: ${usd(v)}`;
+      el("text", { x: x(v) + 6, y: y + barra - 2, "font-size": 11 }, svg).textContent = usd(v);
+    });
   });
-  const g = D.generadoMes;
-  const top = [...g].sort((a, b) => b.med - a.med).slice(0, 2).map(x => MESES_LARGO[x.m - 1]);
-  const bajo = [...g].sort((a, b) => a.med - b.med)[0];
-  const dentro = D.real.filter(r => { const m = +r.f.slice(5) - 1; return r.v >= g[m].lo && r.v <= g[m].hi; }).length;
-  $("l-parecido").innerHTML = `Los datos generados repiten la temporada de la tienda: <b>${top.join(" y ")}</b> son los meses más altos y <b>${MESES_LARGO[bajo.m - 1]}</b> el más bajo. ` +
-    `${dentro} de los 24 meses reales caen dentro del rango generado (lo esperable sería unos 19, porque el rango cubre 8 de cada 10 casos): ` +
-    `la IA captó bien cuánto suelen variar las ventas, aunque los meses más extremos, como diciembre de 2025, quedan algo por fuera.`;
+  cont.replaceChildren(svg);
+
+  const orden = (a) => a.map((v, i) => [v, i]).sort((p, q) => q[0] - p[0]);
+  const altoR = orden(real)[0][1], altoG = orden(generado)[0][1];
+  const bajoR = orden(real).at(-1)[1], bajoG = orden(generado).at(-1)[1];
+  const difs = real.map((v, i) => Math.abs(generado[i] - v) / v * 100);
+  const difMedia = media(difs), peor = difs.indexOf(Math.max(...difs));
+  const igualTemporada = altoR === altoG && bajoR === bajoG;
+  $("l-parecido").innerHTML =
+    (igualTemporada
+      ? `La IA copió la temporada de la tienda: en ambos casos el mejor mes es <b>${MESES_LARGO[altoR]}</b> y el más flojo <b>${MESES_LARGO[bajoR]}</b>. `
+      : `En lo real, el mejor mes es ${MESES_LARGO[altoR]} y el más flojo ${MESES_LARGO[bajoR]}; en lo generado, ${MESES_LARGO[altoG]} y ${MESES_LARGO[bajoG]}. `) +
+    `En promedio, cada mes generado se aleja <b>${difMedia.toFixed(0)}%</b> del real. La mayor diferencia está en ` +
+    `<b>${MESES_LARGO[peor]}</b> (${usd(real[peor])} real contra ${usd(generado[peor])} generado).`;
 }
 
 function contraste() {

@@ -64,11 +64,10 @@
   <section class="card">
     <div class="paso">Paso 1</div>
     <h2>¿Los datos generados se parecen a los reales?</h2>
-    <p class="texto">Cada línea es un año, mes por mes. Si la IA aprendió bien, las líneas naranjas siguen la misma forma que las azules.</p>
+    <p class="texto">La IA aprendió de los 2 años reales y generó 5 años más. Aquí se compara cuánto se vende en promedio cada mes. Si las dos barras de un mes miden parecido, la IA aprendió bien ese mes.</p>
     <div class="leyenda">
-      <span><i style="border-color:var(--real)"></i>Ventas reales 2024 y 2025</span>
-      <span><i style="border-color:var(--gen);border-top-width:1.5px"></i>5 años generados de ejemplo</span>
-      <span><i class="zona" style="background:var(--gen-soft)"></i>Rango de los <span id="n-esc"></span> años generados</span>
+      <span><i class="zona" style="background:var(--real)"></i>Real (promedio de 2024 y 2025)</span>
+      <span><i class="zona" style="background:var(--gen)"></i>Generado por IA (promedio de 5 años)</span>
     </div>
     <div id="g-parecido"></div>
     <div class="lectura" id="l-parecido"></div>
@@ -91,7 +90,7 @@
   <section class="card">
     <div class="paso">Paso 3</div>
     <h2>Ventas esperadas para 2026, 2027 y 2028</h2>
-    <p class="texto">El modelo entrenado con los datos reales y generados estima los próximos 36 meses. La zona sombreada muestra entre qué valores suele moverse cada mes según los años generados.</p>
+    <p class="texto">El modelo entrenado con los datos reales y generados estima los próximos 36 meses. La zona sombreada muestra entre qué valores suele moverse cada mes según los datos generados.</p>
     <div class="leyenda">
       <span><i style="border-color:var(--real)"></i>Ventas reales</span>
       <span><i class="punteada" style="border-color:var(--esp)"></i>Ventas esperadas</span>
@@ -113,7 +112,7 @@
 </main>
 
 <script>
-const D = {"real":[{"f":"2024-01","v":2194,"u":344},{"f":"2024-02","v":1910,"u":264},{"f":"2024-03","v":2037,"u":290},{"f":"2024-04","v":2499,"u":404},{"f":"2024-05","v":2234,"u":476},{"f":"2024-06","v":2262,"u":404},{"f":"2024-07","v":2381,"u":447},{"f":"2024-08","v":2666,"u":553},{"f":"2024-09","v":3063,"u":578},{"f":"2024-10","v":2341,"u":427},{"f":"2024-11","v":2506,"u":576},{"f":"2024-12","v":3146,"u":641},{"f":"2025-01","v":1965,"u":344},{"f":"2025-02","v":2044,"u":394},{"f":"2025-03","v":2329,"u":399},{"f":"2025-04","v":2450,"u":552},{"f":"2025-05","v":2449,"u":460},{"f":"2025-06","v":2280,"u":358},{"f":"2025-07","v":2328,"u":484},{"f":"2025-08","v":3158,"u":657},{"f":"2025-09","v":2779,"u":551},{"f":"2025-10","v":2604,"u":634},{"f":"2025-11","v":2752,"u":643},{"f":"2025-12","v":3685,"u":756}],"generadoMes":[{"m":1,"lo":2054,"med":2180,"hi":2316},{"m":2,"lo":1993,"med":2130,"hi":2261},{"m":3,"lo":2109,"med":2230,"hi":2353},{"m":4,"lo":2273,"med":2390,"hi":2513},{"m":5,"lo":2157,"med":2287,"hi":2443},{"m":6,"lo":2186,"med":2290,"hi":2404},{"m":7,"lo":2206,"med":2316,"hi":2422},{"m":8,"lo":2398,"med":2609,"hi":3142},{"m":9,"lo":2537,"med":2869,"hi":3097},{"m":10,"lo":2223,"med":2377,"hi":2693},{"m":11,"lo":2274,"med":2411,"hi":2753},{"m":12,"lo":2426,"med":3015,"hi":3251}],"generado5":[[2235,2302,2265,2407,2473,2305,2435,3242,3252,2376,2918,3107],[2144,2205,2219,2467,2410,2324,2375,3134,3034,2537,2858,3048],[2225,2211,2303,2451,2470,2253,2299,2931,3084,2426,2711,3045],[2260,2002,2207,2307,2291,2294,2309,2382,2800,2226,2380,2793],[2310,2133,2387,2368,2562,2387,2392,2586,2964,2610,2683,2638]],"contraste":{"real":[1965,2044,2329,2450,2449,2280,2328,3158,2779,2604,2752,3685],"sintetico":[2510,2090,2190,2439,2347,2355,2307,2684,2928,2445,2511,3083],"soloReal":[2192,2023,2054,2379,2234,2254,2383,2667,2685,2719,2860,3147],"ingenuo":[2194,1910,2037,2499,2234,2262,2381,2666,3063,2341,2506,3146]},"pron":[{"f":"2026-01","m":1,"v":2367,"lo":2054,"hi":2316},{"f":"2026-02","m":2,"v":2183,"lo":1993,"hi":2261},{"f":"2026-03","m":3,"v":2222,"lo":2109,"hi":2353},{"f":"2026-04","m":4,"v":2394,"lo":2273,"hi":2513},{"f":"2026-05","m":5,"v":2327,"lo":2157,"hi":2443},{"f":"2026-06","m":6,"v":2318,"lo":2186,"hi":2404},{"f":"2026-07","m":7,"v":2323,"lo":2206,"hi":2422},{"f":"2026-08","m":8,"v":2707,"lo":2398,"hi":3142},{"f":"2026-09","m":9,"v":2896,"lo":2537,"hi":3097},{"f":"2026-10","m":10,"v":2459,"lo":2223,"hi":2693},{"f":"2026-11","m":11,"v":2499,"lo":2274,"hi":2753},{"f":"2026-12","m":12,"v":3040,"lo":2426,"hi":3251},{"f":"2027-01","m":1,"v":2170,"lo":2054,"hi":2316},{"f":"2027-02","m":2,"v":2094,"lo":1993,"hi":2261},{"f":"2027-03","m":3,"v":2211,"lo":2109,"hi":2353},{"f":"2027-04","m":4,"v":2394,"lo":2273,"hi":2513},{"f":"2027-05","m":5,"v":2327,"lo":2157,"hi":2443},{"f":"2027-06","m":6,"v":2318,"lo":2186,"hi":2404},{"f":"2027-07","m":7,"v":2323,"lo":2206,"hi":2422},{"f":"2027-08","m":8,"v":2707,"lo":2398,"hi":3142},{"f":"2027-09","m":9,"v":2896,"lo":2537,"hi":3097},{"f":"2027-10","m":10,"v":2459,"lo":2223,"hi":2693},{"f":"2027-11","m":11,"v":2499,"lo":2274,"hi":2753},{"f":"2027-12","m":12,"v":3040,"lo":2426,"hi":3251},{"f":"2028-01","m":1,"v":2170,"lo":2054,"hi":2316},{"f":"2028-02","m":2,"v":2094,"lo":1993,"hi":2261},{"f":"2028-03","m":3,"v":2211,"lo":2109,"hi":2353},{"f":"2028-04","m":4,"v":2394,"lo":2273,"hi":2513},{"f":"2028-05","m":5,"v":2327,"lo":2157,"hi":2443},{"f":"2028-06","m":6,"v":2318,"lo":2186,"hi":2404},{"f":"2028-07","m":7,"v":2323,"lo":2206,"hi":2422},{"f":"2028-08","m":8,"v":2707,"lo":2398,"hi":3142},{"f":"2028-09","m":9,"v":2896,"lo":2537,"hi":3097},{"f":"2028-10","m":10,"v":2459,"lo":2223,"hi":2693},{"f":"2028-11","m":11,"v":2499,"lo":2274,"hi":2753},{"f":"2028-12","m":12,"v":3040,"lo":2426,"hi":3251}],"anual":{"v":[27692,29249,30794],"u":[4642,5602,6693]},"nEscenarios":2000,"validacion":[{"metodo":"Modelo entrenado solo con datos reales (11 meses)","MAE_usd":186.39,"MAPE_pct":6.79},{"metodo":"Modelo reales + sintéticos","MAE_usd":202.8,"MAPE_pct":7.49},{"metodo":"Modelo entrenado solo con datos sintéticos (TSTR)","MAE_usd":213.76,"MAPE_pct":8.03},{"metodo":"Ingenuo estacional (mismo mes del año pasado) - sin IA","MAE_usd":234.59,"MAPE_pct":8.67},{"metodo":"Promedio móvil 3 meses - sin IA","MAE_usd":347.74,"MAPE_pct":13.3}],"resumen":{"generador_elegido":"TVAE (autoencoder variacional)","generadores":{"TVAE (autoencoder variacional)":{"calidad_global":0.6992,"forma_columnas":0.7867,"relacion_entre_columnas":0.6118,"tasa_rechazo_umbrales":0.1391},"CTGAN (red generativa adversarial)":{"calidad_global":0.6237,"forma_columnas":0.8033,"relacion_entre_columnas":0.4441,"tasa_rechazo_umbrales":0.7979}},"umbrales":{"clientes":{"min":298.35,"max":694.6},"ticket_promedio":{"min":3.95,"max":7.01},"ventas_usd":{"min":1623.35,"max":4238.0},"gasto_stock_usd":{"min":1110.8,"max":3006.65},"ratio_stock_ventas":{"min":0.585,"max":0.762}},"margen_umbral":0.15,"costos_fijos_mensuales":315.0,"filas_semilla":24,"filas_sinteticas_generadas":30000}};
+const D = {"real":[{"f":"2024-01","v":2194,"u":344},{"f":"2024-02","v":1910,"u":264},{"f":"2024-03","v":2037,"u":290},{"f":"2024-04","v":2499,"u":404},{"f":"2024-05","v":2234,"u":476},{"f":"2024-06","v":2262,"u":404},{"f":"2024-07","v":2381,"u":447},{"f":"2024-08","v":2666,"u":553},{"f":"2024-09","v":3063,"u":578},{"f":"2024-10","v":2341,"u":427},{"f":"2024-11","v":2506,"u":576},{"f":"2024-12","v":3146,"u":641},{"f":"2025-01","v":1965,"u":344},{"f":"2025-02","v":2044,"u":394},{"f":"2025-03","v":2329,"u":399},{"f":"2025-04","v":2450,"u":552},{"f":"2025-05","v":2449,"u":460},{"f":"2025-06","v":2280,"u":358},{"f":"2025-07","v":2328,"u":484},{"f":"2025-08","v":3158,"u":657},{"f":"2025-09","v":2779,"u":551},{"f":"2025-10","v":2604,"u":634},{"f":"2025-11","v":2752,"u":643},{"f":"2025-12","v":3685,"u":756}],"generadoMes":[{"m":1,"lo":2054,"med":2180,"hi":2316},{"m":2,"lo":1993,"med":2130,"hi":2261},{"m":3,"lo":2109,"med":2230,"hi":2353},{"m":4,"lo":2273,"med":2390,"hi":2513},{"m":5,"lo":2157,"med":2287,"hi":2443},{"m":6,"lo":2186,"med":2290,"hi":2404},{"m":7,"lo":2206,"med":2316,"hi":2422},{"m":8,"lo":2398,"med":2609,"hi":3142},{"m":9,"lo":2537,"med":2869,"hi":3097},{"m":10,"lo":2223,"med":2377,"hi":2693},{"m":11,"lo":2274,"med":2411,"hi":2753},{"m":12,"lo":2426,"med":3015,"hi":3251}],"promedioMes":{"real":[2080,1977,2183,2475,2342,2271,2354,2912,2921,2473,2629,3416],"generado":[2235,2171,2276,2400,2441,2313,2362,2855,3027,2435,2710,2926]},"nGenerados":60,"contraste":{"real":[1965,2044,2329,2450,2449,2280,2328,3158,2779,2604,2752,3685],"sintetico":[2510,2090,2190,2439,2347,2355,2307,2684,2928,2445,2511,3083],"soloReal":[2192,2023,2054,2379,2234,2254,2383,2667,2685,2719,2860,3147],"ingenuo":[2194,1910,2037,2499,2234,2262,2381,2666,3063,2341,2506,3146]},"pron":[{"f":"2026-01","m":1,"v":2367,"lo":2054,"hi":2316},{"f":"2026-02","m":2,"v":2183,"lo":1993,"hi":2261},{"f":"2026-03","m":3,"v":2222,"lo":2109,"hi":2353},{"f":"2026-04","m":4,"v":2394,"lo":2273,"hi":2513},{"f":"2026-05","m":5,"v":2327,"lo":2157,"hi":2443},{"f":"2026-06","m":6,"v":2318,"lo":2186,"hi":2404},{"f":"2026-07","m":7,"v":2323,"lo":2206,"hi":2422},{"f":"2026-08","m":8,"v":2707,"lo":2398,"hi":3142},{"f":"2026-09","m":9,"v":2896,"lo":2537,"hi":3097},{"f":"2026-10","m":10,"v":2459,"lo":2223,"hi":2693},{"f":"2026-11","m":11,"v":2499,"lo":2274,"hi":2753},{"f":"2026-12","m":12,"v":3040,"lo":2426,"hi":3251},{"f":"2027-01","m":1,"v":2170,"lo":2054,"hi":2316},{"f":"2027-02","m":2,"v":2094,"lo":1993,"hi":2261},{"f":"2027-03","m":3,"v":2211,"lo":2109,"hi":2353},{"f":"2027-04","m":4,"v":2394,"lo":2273,"hi":2513},{"f":"2027-05","m":5,"v":2327,"lo":2157,"hi":2443},{"f":"2027-06","m":6,"v":2318,"lo":2186,"hi":2404},{"f":"2027-07","m":7,"v":2323,"lo":2206,"hi":2422},{"f":"2027-08","m":8,"v":2707,"lo":2398,"hi":3142},{"f":"2027-09","m":9,"v":2896,"lo":2537,"hi":3097},{"f":"2027-10","m":10,"v":2459,"lo":2223,"hi":2693},{"f":"2027-11","m":11,"v":2499,"lo":2274,"hi":2753},{"f":"2027-12","m":12,"v":3040,"lo":2426,"hi":3251},{"f":"2028-01","m":1,"v":2170,"lo":2054,"hi":2316},{"f":"2028-02","m":2,"v":2094,"lo":1993,"hi":2261},{"f":"2028-03","m":3,"v":2211,"lo":2109,"hi":2353},{"f":"2028-04","m":4,"v":2394,"lo":2273,"hi":2513},{"f":"2028-05","m":5,"v":2327,"lo":2157,"hi":2443},{"f":"2028-06","m":6,"v":2318,"lo":2186,"hi":2404},{"f":"2028-07","m":7,"v":2323,"lo":2206,"hi":2422},{"f":"2028-08","m":8,"v":2707,"lo":2398,"hi":3142},{"f":"2028-09","m":9,"v":2896,"lo":2537,"hi":3097},{"f":"2028-10","m":10,"v":2459,"lo":2223,"hi":2693},{"f":"2028-11","m":11,"v":2499,"lo":2274,"hi":2753},{"f":"2028-12","m":12,"v":3040,"lo":2426,"hi":3251}],"anual":{"v":[27692,29249,30794],"u":[4642,5602,6693]},"nEscenarios":2000,"validacion":[{"metodo":"Modelo entrenado solo con datos reales (11 meses)","MAE_usd":186.39,"MAPE_pct":6.79},{"metodo":"Modelo reales + sintéticos","MAE_usd":202.8,"MAPE_pct":7.49},{"metodo":"Modelo entrenado solo con datos sintéticos (TSTR)","MAE_usd":213.76,"MAPE_pct":8.03},{"metodo":"Ingenuo estacional (mismo mes del año pasado) - sin IA","MAE_usd":234.59,"MAPE_pct":8.67},{"metodo":"Promedio móvil 3 meses - sin IA","MAE_usd":347.74,"MAPE_pct":13.3}],"resumen":{"generador_elegido":"TVAE (autoencoder variacional)","generadores":{"TVAE (autoencoder variacional)":{"calidad_global":0.6992,"forma_columnas":0.7867,"relacion_entre_columnas":0.6118,"tasa_rechazo_umbrales":0.1391},"CTGAN (red generativa adversarial)":{"calidad_global":0.6237,"forma_columnas":0.8033,"relacion_entre_columnas":0.4441,"tasa_rechazo_umbrales":0.7979}},"umbrales":{"clientes":{"min":298.35,"max":694.6},"ticket_promedio":{"min":3.95,"max":7.01},"ventas_usd":{"min":1623.35,"max":4238.0},"gasto_stock_usd":{"min":1110.8,"max":3006.65},"ratio_stock_ventas":{"min":0.585,"max":0.762}},"margen_umbral":0.15,"costos_fijos_mensuales":315.0,"filas_semilla":24,"filas_sinteticas_generadas":30000}};
 const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 const MESES_LARGO = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 const $ = (id) => document.getElementById(id);
@@ -124,7 +123,6 @@ const el = (tag, attrs, parent) => { const e = document.createElementNS(NS, tag)
   for (const k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; };
 const media = (a) => a.reduce((s, x) => s + x, 0) / a.length;
 const errorMedio = (pred, real) => media(pred.map((p, i) => Math.abs(p - real[i])));
-$("n-esc").textContent = D.nEscenarios.toLocaleString("es-EC");
 
 /* Gráfico de líneas genérico.
    opts: { cont, n, etiquetas(i)->texto|null, series:[{v:[], color, ancho, punteada, puntos, inicio, nombre}],
@@ -172,31 +170,44 @@ function cifras() {
   const c = D.contraste, r = D.resumen;
   const err = errorMedio(c.sintetico, c.real) / media(c.real) * 100;
   $("cifras").innerHTML =
-    `<div class="cifra"><span>Meses reales → meses generados</span><b>24 → ${(r.filas_sinteticas_generadas).toLocaleString("es-EC")}</b></div>` +
+    `<div class="cifra"><span>Historial de la tienda</span><b>2 años reales + ${D.nGenerados / 12} generados</b></div>` +
     `<div class="cifra"><span>Parecido de los datos generados con los reales</span><b>${Math.round(r.generadores[r.generador_elegido].calidad_global * 100)} de 100</b></div>` +
     `<div class="cifra"><span>Error al predecir 2025 con datos generados</span><b>± ${err.toFixed(0)}% al mes</b></div>`;
 }
 
 function parecido() {
-  const r24 = D.real.slice(0, 12).map(r => r.v), r25 = D.real.slice(12).map(r => r.v);
-  const nombre = (anio) => (i) => `${MESES[i]} ${anio}`;
-  lineas({
-    cont: "g-parecido", n: 12, titulo: "Ventas reales y generadas por mes",
-    etiquetas: (i, W) => (W < 500 ? MESES[i][0] : MESES[i]),
-    zonas: [{ lo: D.generadoMes.map(g => g.lo), hi: D.generadoMes.map(g => g.hi), color: "--gen-soft" }],
-    series: [
-      ...D.generado5.map(a => ({ v: a, color: "--gen", ancho: 1.5, opacidad: .75 })),
-      { v: r24, color: "--real", ancho: 3, puntos: true, nombre: nombre(2024) },
-      { v: r25, color: "--real", ancho: 3, puntos: true, nombre: nombre(2025) },
-    ],
+  const { real, generado } = D.promedioMes;
+  const cont = $("g-parecido");
+  const W = Math.max(300, cont.clientWidth || 800);
+  const L = 40, R = 64, fila = 34, barra = 13, T = 4;
+  const H = T + fila * 12;
+  const max = Math.max(...real, ...generado);
+  const x = (v) => L + (W - L - R) * v / max;
+  const svg = el("svg", { viewBox: `0 0 ${W} ${H}`, role: "img", "aria-label": "Ventas promedio por mes: real contra generado" });
+  MESES.forEach((m, i) => {
+    const y0 = T + i * fila;
+    el("text", { x: 0, y: y0 + barra + 4 }, svg).textContent = m;
+    [[real[i], "--real", "Real"], [generado[i], "--gen", "Generado"]].forEach(([v, color, quien], k) => {
+      const y = y0 + k * (barra + 2);
+      const r = el("rect", { x: L, y, width: x(v) - L, height: barra, rx: 3, fill: css(color) }, svg);
+      el("title", {}, r).textContent = `${MESES_LARGO[i]}, ${quien.toLowerCase()}: ${usd(v)}`;
+      el("text", { x: x(v) + 6, y: y + barra - 2, "font-size": 11 }, svg).textContent = usd(v);
+    });
   });
-  const g = D.generadoMes;
-  const top = [...g].sort((a, b) => b.med - a.med).slice(0, 2).map(x => MESES_LARGO[x.m - 1]);
-  const bajo = [...g].sort((a, b) => a.med - b.med)[0];
-  const dentro = D.real.filter(r => { const m = +r.f.slice(5) - 1; return r.v >= g[m].lo && r.v <= g[m].hi; }).length;
-  $("l-parecido").innerHTML = `Los datos generados repiten la temporada de la tienda: <b>${top.join(" y ")}</b> son los meses más altos y <b>${MESES_LARGO[bajo.m - 1]}</b> el más bajo. ` +
-    `${dentro} de los 24 meses reales caen dentro del rango generado (lo esperable sería unos 19, porque el rango cubre 8 de cada 10 casos): ` +
-    `la IA captó bien cuánto suelen variar las ventas, aunque los meses más extremos, como diciembre de 2025, quedan algo por fuera.`;
+  cont.replaceChildren(svg);
+
+  const orden = (a) => a.map((v, i) => [v, i]).sort((p, q) => q[0] - p[0]);
+  const altoR = orden(real)[0][1], altoG = orden(generado)[0][1];
+  const bajoR = orden(real).at(-1)[1], bajoG = orden(generado).at(-1)[1];
+  const difs = real.map((v, i) => Math.abs(generado[i] - v) / v * 100);
+  const difMedia = media(difs), peor = difs.indexOf(Math.max(...difs));
+  const igualTemporada = altoR === altoG && bajoR === bajoG;
+  $("l-parecido").innerHTML =
+    (igualTemporada
+      ? `La IA copió la temporada de la tienda: en ambos casos el mejor mes es <b>${MESES_LARGO[altoR]}</b> y el más flojo <b>${MESES_LARGO[bajoR]}</b>. `
+      : `En lo real, el mejor mes es ${MESES_LARGO[altoR]} y el más flojo ${MESES_LARGO[bajoR]}; en lo generado, ${MESES_LARGO[altoG]} y ${MESES_LARGO[bajoG]}. `) +
+    `En promedio, cada mes generado se aleja <b>${difMedia.toFixed(0)}%</b> del real. La mayor diferencia está en ` +
+    `<b>${MESES_LARGO[peor]}</b> (${usd(real[peor])} real contra ${usd(generado[peor])} generado).`;
 }
 
 function contraste() {
