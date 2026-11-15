@@ -113,6 +113,11 @@
 
 <script>
 const D = /*__DATOS__*/null;
+if (!D) {
+  document.querySelector("main").innerHTML = "<h1>Esta es solo la plantilla</h1><p>No tiene datos. " +
+    "Ejecuta <code>python generar_html.py</code> y abre <b>index.html</b>.</p>";
+  throw new Error("Plantilla sin datos");
+}
 const MESES = ["Ene","Feb","Mar","Abr","May","Jun","Jul","Ago","Sep","Oct","Nov","Dic"];
 const MESES_LARGO = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
 const $ = (id) => document.getElementById(id);
