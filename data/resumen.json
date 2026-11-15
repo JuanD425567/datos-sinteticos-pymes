@@ -1,0 +1,43 @@
+{
+  "generador_elegido": "TVAE (autoencoder variacional)",
+  "generadores": {
+    "TVAE (autoencoder variacional)": {
+      "calidad_global": 0.6992,
+      "forma_columnas": 0.7867,
+      "relacion_entre_columnas": 0.6118,
+      "tasa_rechazo_umbrales": 0.1391
+    },
+    "CTGAN (red generativa adversarial)": {
+      "calidad_global": 0.6237,
+      "forma_columnas": 0.8033,
+      "relacion_entre_columnas": 0.4441,
+      "tasa_rechazo_umbrales": 0.7979
+    }
+  },
+  "umbrales": {
+    "clientes": {
+      "min": 298.35,
+      "max": 694.6
+    },
+    "ticket_promedio": {
+      "min": 3.95,
+      "max": 7.01
+    },
+    "ventas_usd": {
+      "min": 1623.35,
+      "max": 4238.0
+    },
+    "gasto_stock_usd": {
+      "min": 1110.8,
+      "max": 3006.65
+    },
+    "ratio_stock_ventas": {
+      "min": 0.585,
+      "max": 0.762
+    }
+  },
+  "margen_umbral": 0.15,
+  "costos_fijos_mensuales": 315.0,
+  "filas_semilla": 24,
+  "filas_sinteticas_generadas": 30000
+}
